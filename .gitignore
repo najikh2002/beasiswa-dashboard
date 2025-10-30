@@ -1,0 +1,149 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.env
+.venv/
+venv/
+ENV/
+env/
+*.sqlite3
+*.db
+
+# -------------------------
+# Airflow
+# -------------------------
+# Airflow logs and metadata
+logs/
+airflow/logs/
+airflow/*.pid
+airflow/airflow.db
+airflow/unittests.cfg
+airflow/tmp/
+airflow/.airflowenv
+# Local Airflow SQLite database
+airflow/airflow.cfg
+airflow/airflow-webserver.pid
+airflow/airflow-webserver-monitor.pid
+# Dags compiled cache
+dags/__pycache__/
+
+# -------------------------
+# Streamlit
+# -------------------------
+# Streamlit cache and state files
+.streamlit/
+.streamlit/secrets.toml
+streamlit/__pycache__/
+streamlit/.streamlit/
+streamlit/cache/
+streamlit/.cache/
+.streamlit/config.toml
+
+# -------------------------
+# Docker
+# -------------------------
+# Docker build artifacts
+*.log
+*.pid
+*.seed
+*.bak
+*.swp
+*.tmp
+docker-compose.override.yml
+# Local volume data
+data/
+backups/
+tmp/
+# Docker environment variables
+.env.docker
+.env.local
+.env.production
+.env.development
+
+# -------------------------
+# PostgreSQL / Database Dumps
+# -------------------------
+*.sql
+*.dump
+*.bak
+*.tar
+*.gz
+
+# -------------------------
+# OS / Editor Files
+# -------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# -------------------------
+# Build / Packaging
+# -------------------------
+build/
+dist/
+*.manifest
+*.spec
+*.egg-info
+.eggs/
+*.whl
+
+# -------------------------
+# Test / Debug
+# -------------------------
+.coverage
+.cache/
+.tox/
+pytest_cache/
+debug.log
+debug/
+coverage.xml
+test-reports/
+
+# -------------------------
+# Project Data Artifacts
+# -------------------------
+data/*.csv
+data/*.json
+data/*.xlsx
+data/*.parquet
+data/*.zip
+data/*.gz
+data/*.bak
+data/tmp/
+data/output/
+data/old/
+data/processed/
+stats.json
+
+# -------------------------
+# Backup
+# -------------------------
+backups/
+backups/*/
+*.bak
+*.backup
+*.old
+
+# -------------------------
+# System Files
+# -------------------------
+nohup.out
+*.swp
+*.swo
+*.orig
+*.rej
+*.tmp
+*.temp
+*~
