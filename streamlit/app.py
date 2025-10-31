@@ -134,41 +134,67 @@ if not df.empty:
     # Timeline visualization
     st.subheader("📅 Timeline Beasiswa")
     
-    # Create Gantt-like chart
-    fig = go.Figure()
+    # Prepare data for timeline
+    df_timeline = df_filtered.copy()
+    df_timeline['Start'] = df_timeline['buka']
+    df_timeline['Finish'] = df_timeline['tutup']
+    df_timeline['Task'] = df_timeline['nama']
     
-    colors = {
-        'Sedang Buka': '#28a745',
-        'Akan Buka': '#ffc107',
-        'Sudah Tutup': '#dc3545'
-    }
+    # Assign colors based on status
+    color_map = {}
+    for idx, row in df_timeline.iterrows():
+        if 'Sedang Buka' in row['status']:
+            color_map[row['nama']] = '#28a745'
+        elif 'Akan Buka' in row['status']:
+            color_map[row['nama']] = '#ffc107'
+        else:
+            color_map[row['nama']] = '#dc3545'
     
-    for idx, row in df_filtered.iterrows():
-        status_type = 'Sedang Buka' if 'Sedang Buka' in row['status'] else \
-                     'Akan Buka' if 'Akan Buka' in row['status'] else 'Sudah Tutup'
-        
-        fig.add_trace(go.Bar(
-            name=row['nama'],
-            x=[row['tutup'] - row['buka']],
-            y=[row['nama']],
-            base=row['buka'],
-            orientation='h',
-            marker=dict(color=colors[status_type]),
-            text=row['status'],
-            textposition='inside',
-            hovertemplate=f"<b>{row['nama']}</b><br>" +
-                         f"Jenjang: {row['jenjang']}<br>" +
-                         f"Negara: {row['negara']}<br>" +
-                         f"Buka: {row['buka'].strftime('%d %b %Y')}<br>" +
-                         f"Tutup: {row['tutup'].strftime('%d %b %Y')}<br>" +
-                         f"Status: {row['status']}<br>" +
-                         "<extra></extra>"
-        ))
+    # Create timeline using plotly express
+    fig = px.timeline(
+        df_timeline,
+        x_start='Start',
+        x_end='Finish',
+        y='Task',
+        color='Task',
+        color_discrete_map=color_map,
+        hover_data={'Task': False, 'Start': '|%d %b %Y', 'Finish': '|%d %b %Y'}
+    )
+
+    # Customize hover template
+    for i, row in enumerate(df_timeline.itertuples()):
+        fig.data[i].hovertemplate = (
+            f"<b>{row.nama}</b><br>" +
+            f"Jenjang: {row.jenjang}<br>" +
+            f"Negara: {row.negara}<br>" +
+            f"Buka: {row.buka.strftime('%d %b %Y')}<br>" +
+            f"Tutup: {row.tutup.strftime('%d %b %Y')}<br>" +
+            f"Status: {row.status}<br>" +
+            "<extra></extra>"
+        )
     
-    # Add today line
+    # Add today line using shapes (more reliable than add_vline)
     today = datetime.now()
-    fig.add_vline(x=today, line_dash="dash", line_color="red", 
-                  annotation_text="Hari Ini", annotation_position="top")
+    fig.add_shape(
+        type="line",
+        x0=today,
+        x1=today,
+        y0=0,
+        y1=1,
+        yref="paper",
+        line=dict(color="red", width=2, dash="dash")
+    )
+
+    # Add annotation for today
+    fig.add_annotation(
+        x=today,
+        y=1,
+        yref="paper",
+        text="Hari Ini",
+        showarrow=False,
+        yshift=10,
+        font=dict(color="red", size=12)
+    )
     
     fig.update_layout(
         height=max(400, len(df_filtered) * 40),
@@ -178,7 +204,6 @@ if not df.empty:
         hovermode='closest',
         xaxis=dict(
             tickformat='%b %Y',
-            dtick='M1'
         )
     )
     
